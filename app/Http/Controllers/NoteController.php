@@ -30,13 +30,6 @@ class NoteController extends Controller
 	public function create(Request $request)
 
 	{
-		$created = Note::query()->create([
-			'user_id' => $request->user_id,
-			'content' => $request->content,
-		]);
-		return new JsonResponse([
-			'data' => $created
-		]);
 	}
 
 	/**
@@ -47,6 +40,13 @@ class NoteController extends Controller
 	 */
 	public function store(Request $request)
 	{
+		$created = Note::query()->create([
+			'user_id' => $request->user_id,
+			'content' => $request->content,
+		]);
+		return new JsonResponse([
+			'data' => $created
+		]);
 	}
 
 	/**
