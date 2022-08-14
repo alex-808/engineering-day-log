@@ -17,10 +17,9 @@ class NoteFactory extends Factory
 	public function definition()
 	{
 		return [
-			'id' => random_int(0, 99999),
 			'created_at' => now(),
 			'updated_at' => now(),
-			'user_id' => random_int(0, 99999),
+			'user_id' => random_int(0, 20),
 			'content' => "This is the note's content"
 		];
 	}
