@@ -6,6 +6,7 @@ use App\Models\Note;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Mockery\Matcher\Not;
 
 class NoteController extends Controller
 {
@@ -52,13 +53,14 @@ class NoteController extends Controller
 	/**
 	 * Display the specified resource.
 	 *
-	 * @param  int  $id
+	 * @param int $id
 	 * @return \Illuminate\Http\Response
 	 */
 	public function show($id)
 	{
+		$note = Note::query()->find($id);
 		return new JsonResponse([
-			'data' => $id
+			'data' => $note
 		]);
 	}
 
