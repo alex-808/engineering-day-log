@@ -21,32 +21,31 @@ class NoteController extends Controller
 		]);
 	}
 
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @return \Illuminate\Http\Response
-	 */
 	public function store(Request $request)
 	{
 		$created = Note::query()->create([
 			'user_id' => $request->user_id,
 			'content' => $request->content,
 		]);
-		return new JsonResponse([
-			'data' => $created
-		]);
+		if (!$created) {
+			return new JsonResponse(
+				['errors' => "Failed to create note."]
+			);
+		} else {
+			return new JsonResponse([
+				'data' => $created
+			]);
+		}
 	}
 
 	/**
 	 * Display the specified resource.
 	 *
-	 * @param int $id
+	 * @param  \App\Models\Note  $note
 	 * @return \Illuminate\Http\Response
 	 */
-	public function show($id)
+	public function show(Note $note)
 	{
-		$note = Note::query()->find($id);
 		return new JsonResponse([
 			'data' => $note
 		]);
@@ -56,24 +55,24 @@ class NoteController extends Controller
 	 * Update the specified resource in storage.
 	 *
 	 * @param  \Illuminate\Http\Request  $request
-	 * @param  int  $id
+	 * @param  \App\Models\Note  $note
 	 * @return \Illuminate\Http\Response
 	 */
-	public function update(Request $request, $id)
+	public function update(Request $request, Note $note)
 	{
-		$note = Note::query()->find($id);
 		$updated = $note->update([
-			'content' => $request->content ?? $note->content
+			'content' => $request->content
 		]);
+
 		if (!$updated) {
 			return new JsonResponse([
 				'errors' => [
-					'Failed to update model.'
+					'Failed to updated note'
 				]
-			], 400);
+			]);
 		} else {
 			return new JsonResponse([
-				'data' => Note::query()->find($id)
+				'data' => $note
 			]);
 		}
 	}
@@ -81,23 +80,21 @@ class NoteController extends Controller
 	/**
 	 * Remove the specified resource from storage.
 	 *
-	 * @param  int  $id
+	 * @param  \App\Models\Note  $note
 	 * @return \Illuminate\Http\Response
 	 */
-	public function destroy($id)
+	public function destroy(Note $note)
 	{
-		$note = Note::query()->find($id);
 		$deleted = $note->forceDelete();
-
 		if (!$deleted) {
 			return new JsonResponse([
 				'errors' => [
-					'Could not delete resource.'
+					"Unable to delete note."
 				]
 			], 400);
 		} else {
 			return new JsonResponse([
-				'data' => 'success'
+				'data' => "success"
 			]);
 		}
 	}
