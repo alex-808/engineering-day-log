@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Note;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
-use Mockery\Matcher\Not;
 
 class NoteController extends Controller
 {
@@ -21,16 +19,6 @@ class NoteController extends Controller
 		return new JsonResponse([
 			'data' => $notes
 		]);
-	}
-
-	/**
-	 * Show the form for creating a new resource.
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
-	public function create(Request $request)
-
-	{
 	}
 
 	/**
@@ -65,17 +53,6 @@ class NoteController extends Controller
 	}
 
 	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function edit($id)
-	{
-		//
-	}
-
-	/**
 	 * Update the specified resource in storage.
 	 *
 	 * @param  \Illuminate\Http\Request  $request
@@ -84,7 +61,21 @@ class NoteController extends Controller
 	 */
 	public function update(Request $request, $id)
 	{
-		//
+		$note = Note::query()->find($id);
+		$updated = $note->update([
+			'content' => $request->content ?? $note->content
+		]);
+		if (!$updated) {
+			return new JsonResponse([
+				'errors' => [
+					'Failed to update model.'
+				]
+			], 400);
+		} else {
+			return new JsonResponse([
+				'data' => Note::query()->find($id)
+			]);
+		}
 	}
 
 	/**
@@ -95,6 +86,19 @@ class NoteController extends Controller
 	 */
 	public function destroy($id)
 	{
-		//
+		$note = Note::query()->find($id);
+		$deleted = $note->forceDelete();
+
+		if (!$deleted) {
+			return new JsonResponse([
+				'errors' => [
+					'Could not delete resource.'
+				]
+			], 400);
+		} else {
+			return new JsonResponse([
+				'data' => 'success'
+			]);
+		}
 	}
 }
