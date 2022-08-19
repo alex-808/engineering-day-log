@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreTagRequest;
-use App\Http\Requests\UpdateTagRequest;
 use App\Models\Tag;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class TagController extends Controller
 {
@@ -28,8 +27,24 @@ class TagController extends Controller
 	 * @param  \App\Http\Requests\StoreTagRequest  $request
 	 * @return \Illuminate\Http\Response
 	 */
-	public function store(StoreTagRequest $request)
+	public function store(Request $request)
 	{
+		$created = Tag::query()->create([
+			'user_id' => $request->user_id,
+			'name' => $request->name
+		]);
+
+		if (!$created) {
+			return new JsonResponse([
+				'errors' => [
+					'Failed to create tag'
+				]
+			]);
+		} else {
+			return new JsonResponse([
+				'data' => $created
+			]);
+		}
 	}
 
 	/**
@@ -40,18 +55,9 @@ class TagController extends Controller
 	 */
 	public function show(Tag $tag)
 	{
-		//
-	}
-
-	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  \App\Models\Tag  $tag
-	 * @return \Illuminate\Http\Response
-	 */
-	public function edit(Tag $tag)
-	{
-		//
+		return new JsonResponse([
+			'data' => $tag
+		]);
 	}
 
 	/**
@@ -61,9 +67,23 @@ class TagController extends Controller
 	 * @param  \App\Models\Tag  $tag
 	 * @return \Illuminate\Http\Response
 	 */
-	public function update(UpdateTagRequest $request, Tag $tag)
+	public function update(Request $request, Tag $tag)
 	{
-		//
+		$updated = $tag->update([
+			'name' => $request->name,
+		]);
+
+		if (!$updated) {
+			return new JsonResponse([
+				'errors' => [
+					'Failed to update tag.'
+				]
+			]);
+		} else {
+			return new JsonResponse([
+				'data' => $tag
+			]);
+		}
 	}
 
 	/**
@@ -74,6 +94,17 @@ class TagController extends Controller
 	 */
 	public function destroy(Tag $tag)
 	{
-		//
+		$deleted = $tag->forceDelete();
+		if (!$deleted) {
+			return new JsonResponse([
+				'errors' => [
+					'Failed to delete tag.'
+				]
+			]);
+		} else {
+			return new JsonResponse([
+				'data' => 'success'
+			]);
+		}
 	}
 }
