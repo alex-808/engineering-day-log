@@ -14,8 +14,6 @@ class Note extends Model
 		"user_id"
 	];
 
-	protected $content;
-
 	public function user()
 	{
 		return $this->belongsTo(User::class, 'user_id');

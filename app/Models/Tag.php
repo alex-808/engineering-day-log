@@ -7,5 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Tag extends Model
 {
-    use HasFactory;
+	use HasFactory;
+
+	public function user()
+	{
+		return $this->belongsTo(User::class, 'user_id');
+	}
 }
