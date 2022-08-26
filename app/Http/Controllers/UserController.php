@@ -2,23 +2,86 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-	public function show()
-	{
-	}
+	/**
+	 * Display a listing of the resource.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
 	public function index()
 	{
-		// Index shouldn't exist?
+		$users = User::query()->get();
+		return new JsonResponse([
+			'data' => $users
+		]);
 	}
-	public function destroy()
+
+	/**
+	 * Store a newly created resource in storage.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @return \Illuminate\Http\Response
+	 */
+	public function store(Request $request)
 	{
-		// destroy would require authentication and that you are that user
+		$created = User::query()->create([
+			'name' => $request->name,
+			'email' => $request->email,
+			'password' => $request->password,
+		]);
+
+		return new JsonResponse([
+			'data' => $created
+		]);
 	}
-	public function store()
+
+	/**
+	 * Display the specified resource.
+	 *
+	 * @param  \App\Models\User  $user
+	 * @return \Illuminate\Http\Response
+	 */
+	public function show(User $user)
 	{
+		return new JsonResponse([
+			'data' => $user
+		]);
+	}
+
+	/**
+	 * Update the specified resource in storage.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @param  \App\Models\User  $user
+	 * @return \Illuminate\Http\Response
+	 */
+	public function update(Request $request, User $user)
+	{
+		$updated = User::query()->update([
+			'name' => $request->name,
+			'email' => $request->email,
+			'password' => $request->password,
+		]);
+
+		return new JsonResponse([
+			'data' => $updated
+			// In progress
+		]);
+	}
+
+	/**
+	 * Remove the specified resource from storage.
+	 *
+	 * @param  \App\Models\User  $user
+	 * @return \Illuminate\Http\Response
+	 */
+	public function destroy(User $user)
+	{
+		//
 	}
 }
-// I'm not sure how to handle authentication and stuff. Creating a new user requires a password and a valid, non-duplicate email
