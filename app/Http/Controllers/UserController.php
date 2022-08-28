@@ -62,16 +62,23 @@ class UserController extends Controller
 	 */
 	public function update(Request $request, User $user)
 	{
-		$updated = User::query()->update([
-			'name' => $request->name,
-			'email' => $request->email,
-			'password' => $request->password,
+		$updated = $user->update([
+			'name' => $request->name ?? $user->name,
+			'email' => $request->email ?? $user->email,
+			'password' => $request->password ?? $user->password,
 		]);
 
-		return new JsonResponse([
-			'data' => $updated
-			// In progress
-		]);
+		if (!$updated) {
+			return new JsonResponse([
+				'errors' => [
+					'Failed to update user'
+				]
+			]);
+		} else {
+			return new JsonResponse([
+				'data' => $user
+			]);
+		}
 	}
 
 	/**
@@ -82,6 +89,18 @@ class UserController extends Controller
 	 */
 	public function destroy(User $user)
 	{
-		//
+		$deleted = $user->forceDelete();
+
+		if (!$deleted) {
+			return new JsonResponse([
+				'errors' => [
+					'Unable to delete user.'
+				]
+			], 400);
+		} else {
+			return new JsonResponse([
+				'data' => "success"
+			]);
+		}
 	}
 }

@@ -67,7 +67,7 @@ class NoteController extends Controller
 		if (!$updated) {
 			return new JsonResponse([
 				'errors' => [
-					'Failed to updated note'
+					'Failed to update note'
 				]
 			]);
 		} else {
