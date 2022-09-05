@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Note;
+use App\Models\User;
+use Illuminate\Foundation\Auth\User as AuthUser;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class NoteController extends Controller
 {
@@ -13,9 +16,9 @@ class NoteController extends Controller
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function index()
+	public function index(Request $request)
 	{
-		$notes = Note::query()->get();
+		$notes = User::find(Auth::id())->notes;
 		return new JsonResponse([
 			'data' => $notes
 		]);
@@ -24,7 +27,7 @@ class NoteController extends Controller
 	public function store(Request $request)
 	{
 		$created = Note::query()->create([
-			'user_id' => $request->user_id,
+			'user_id' => Auth::id(),
 			'content' => $request->content,
 		]);
 		if (!$created) {
@@ -85,6 +88,12 @@ class NoteController extends Controller
 	 */
 	public function destroy(Note $note)
 	{
+		if (Auth::id() !== $note->user->id) {
+			return [
+				'message' => 'You do not have permissions to modify'
+			];
+		}
+
 		$deleted = $note->forceDelete();
 		if (!$deleted) {
 			return new JsonResponse([
