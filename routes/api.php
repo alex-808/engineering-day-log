@@ -4,6 +4,7 @@ use App\Http\Controllers\NoteController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\SearchController;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -35,6 +36,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 	});
 
 	Route::post('auth/logout', [AuthController::class, 'logout']);
+
+	Route::post('/search', [SearchController::class, 'index']);
 });
 
 Route::middleware([])->post('/tokens/create/{user}', function (Request $request, User $user) {
