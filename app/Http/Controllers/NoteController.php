@@ -4,10 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Note;
 use App\Models\User;
-use Illuminate\Foundation\Auth\User as AuthUser;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\JsonResponse;
 
 class NoteController extends Controller
 {
@@ -19,9 +18,9 @@ class NoteController extends Controller
 	public function index(Request $request)
 	{
 		$notes = User::find(Auth::id())->notes;
-		return new JsonResponse([
+		return [
 			'data' => $notes
-		]);
+		];
 	}
 
 	public function store(Request $request)
@@ -31,13 +30,12 @@ class NoteController extends Controller
 			'content' => $request->content,
 		]);
 		if (!$created) {
-			return new JsonResponse(
-				['errors' => "Failed to create note."]
-			);
+			return
+				['errors' => "Failed to create note."];
 		} else {
-			return new JsonResponse([
+			return [
 				'data' => $created
-			]);
+			];
 		}
 	}
 
@@ -49,9 +47,9 @@ class NoteController extends Controller
 	 */
 	public function show(Note $note)
 	{
-		return new JsonResponse([
+		return [
 			'data' => $note
-		]);
+		];
 	}
 
 	/**
