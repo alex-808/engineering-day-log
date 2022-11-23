@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Note;
+use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -104,5 +105,23 @@ class NoteController extends Controller
 				'data' => "success"
 			]);
 		}
+	}
+	public function addTag(Note $note, Tag $tag)
+	{
+        // This will create a new entry in the pivot table
+        $note->tag()->attach($tag);
+
+		return [
+			'message' => 'tag added'
+		];
+	}
+	public function removeTag(Note $note, Tag $tag)
+	{
+        // This will delete an entry in the pivot table
+        $note->tag()->detach($tag);
+
+		return [
+			'message' => 'tag removed'
+		];
 	}
 }

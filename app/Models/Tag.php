@@ -18,4 +18,9 @@ class Tag extends Model
 	{
 		return $this->belongsTo(User::class, 'user_id');
 	}
+
+    public function note()
+	{
+		return $this->belongsToMany(Note::class)->withTimestamps();
+	}
 }
