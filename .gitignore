@@ -16,3 +16,4 @@ yarn-error.log
 /.vscode
 *.swp
 notes.txt
+/cli
