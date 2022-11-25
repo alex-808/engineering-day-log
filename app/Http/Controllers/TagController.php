@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Tag;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TagController extends Controller
 {
@@ -30,7 +31,7 @@ class TagController extends Controller
 	public function store(Request $request)
 	{
 		$created = Tag::query()->create([
-			'user_id' => $request->user_id,
+			'user_id' => Auth::id(),
 			'name' => $request->name
 		]);
 
