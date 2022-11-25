@@ -87,7 +87,7 @@ class NoteController extends Controller
 	 */
 	public function destroy(Note $note)
 	{
-		if (Auth::id() !== $note->user->id) {
+		if (Auth::id() !== $note->user_id) {
 			return [
 				'message' => 'You do not have permissions to modify'
 			];
@@ -108,8 +108,8 @@ class NoteController extends Controller
 	}
 	public function addTag(Note $note, Tag $tag)
 	{
-        // This will create a new entry in the pivot table
-        $note->tag()->attach($tag);
+		// This will create a new entry in the pivot table
+		$note->tag()->attach($tag);
 
 		return [
 			'message' => 'tag added'
@@ -117,8 +117,8 @@ class NoteController extends Controller
 	}
 	public function removeTag(Note $note, Tag $tag)
 	{
-        // This will delete an entry in the pivot table
-        $note->tag()->detach($tag);
+		// This will delete an entry in the pivot table
+		$note->tag()->detach($tag);
 
 		return [
 			'message' => 'tag removed'

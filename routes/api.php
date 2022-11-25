@@ -27,6 +27,7 @@ Route::post('/auth/register', [AuthController::class, 'register']);
 Route::post('/auth/login', [AuthController::class, 'login']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
+
 	Route::post('/notes/{note}/tags/{tag}', 'App\Http\Controllers\NoteController@addTag');
 	Route::delete('/notes/{note}/tags/{tag}', 'App\Http\Controllers\NoteController@removeTag');
 	Route::apiResource('notes', NoteController::class);
