@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Tag;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,7 +17,7 @@ class TagController extends Controller
 	 */
 	public function index()
 	{
-		$tags = Tag::find(Auth::id())->notes();
+		$tags = User::find(Auth::id())->tags;
 		return new JsonResponse([
 			'data' => $tags
 		]);
