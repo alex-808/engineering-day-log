@@ -17,6 +17,7 @@ class TagController extends Controller
 	 */
 	public function index()
 	{
+
 		$tags = User::find(Auth::id())->tags;
 		return new JsonResponse([
 			'data' => $tags
@@ -57,6 +58,8 @@ class TagController extends Controller
 	 */
 	public function show(Tag $tag)
 	{
+		$this->authorize('owns-tag', $tag);
+
 		return new JsonResponse([
 			'data' => $tag
 		]);
@@ -71,6 +74,8 @@ class TagController extends Controller
 	 */
 	public function update(Request $request, Tag $tag)
 	{
+		$this->authorize('owns-tag', $tag);
+
 		$updated = $tag->update([
 			'name' => $request->name,
 		]);
@@ -96,6 +101,7 @@ class TagController extends Controller
 	 */
 	public function destroy(Tag $tag)
 	{
+		$this->authorize('owns-tag', $tag);
 
 		$deleted = $tag->forceDelete();
 		if (!$deleted) {

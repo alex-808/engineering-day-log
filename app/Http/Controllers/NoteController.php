@@ -48,6 +48,7 @@ class NoteController extends Controller
 	 */
 	public function show(Note $note)
 	{
+		$this->authorize('owns-note', $note);
 		return [
 			'data' => $note
 		];
@@ -62,6 +63,9 @@ class NoteController extends Controller
 	 */
 	public function update(Request $request, Note $note)
 	{
+
+		$this->authorize('owns-note', $note);
+
 		$updated = $note->update([
 			'content' => $request->content
 		]);
@@ -87,11 +91,7 @@ class NoteController extends Controller
 	 */
 	public function destroy(Note $note)
 	{
-		if (Auth::id() !== $note->user_id) {
-			return [
-				'message' => 'You do not have permissions to modify'
-			];
-		}
+		$this->authorize('owns-note', $note);
 
 		$deleted = $note->forceDelete();
 		if (!$deleted) {
@@ -108,6 +108,9 @@ class NoteController extends Controller
 	}
 	public function addTag(Note $note, Tag $tag)
 	{
+
+		$this->authorize('owns-note', $note);
+
 		// This will create a new entry in the pivot table
 		$note->tag()->attach($tag);
 
@@ -117,6 +120,7 @@ class NoteController extends Controller
 	}
 	public function removeTag(Note $note, Tag $tag)
 	{
+		$this->authorize('owns-note', $note);
 		// This will delete an entry in the pivot table
 		$note->tag()->detach($tag);
 
