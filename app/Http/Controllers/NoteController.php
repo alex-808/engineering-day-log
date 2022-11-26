@@ -110,9 +110,17 @@ class NoteController extends Controller
 	{
 
 		$this->authorize('owns-note', $note);
+		$this->authorize('owns-tag', $tag);
 
+		// check if tag already exists on note
+		if ($note->tags->contains($tag)) {
+			return [
+				'message' => 'tag already exists on note'
+			];
+		}
 		// This will create a new entry in the pivot table
-		$note->tag()->attach($tag);
+		$note->tags()->attach($tag);
+
 
 		return [
 			'message' => 'tag added'
@@ -121,8 +129,9 @@ class NoteController extends Controller
 	public function removeTag(Note $note, Tag $tag)
 	{
 		$this->authorize('owns-note', $note);
+		$this->authorize('owns-tag', $tag);
 		// This will delete an entry in the pivot table
-		$note->tag()->detach($tag);
+		$note->tags()->detach($tag);
 
 		return [
 			'message' => 'tag removed'

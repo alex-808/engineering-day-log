@@ -19,7 +19,7 @@ class Tag extends Model
 		return $this->belongsTo(User::class, 'user_id');
 	}
 
-    public function note()
+	public function notes()
 	{
 		return $this->belongsToMany(Note::class)->withTimestamps();
 	}
