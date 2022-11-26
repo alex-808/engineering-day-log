@@ -16,7 +16,7 @@ class TagController extends Controller
 	 */
 	public function index()
 	{
-		$tags = Tag::query()->get();
+		$tags = Tag::find(Auth::id())->notes();
 		return new JsonResponse([
 			'data' => $tags
 		]);
@@ -95,6 +95,7 @@ class TagController extends Controller
 	 */
 	public function destroy(Tag $tag)
 	{
+
 		$deleted = $tag->forceDelete();
 		if (!$deleted) {
 			return new JsonResponse([
